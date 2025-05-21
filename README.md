@@ -2,7 +2,7 @@
 
 > Desenvolvemos a AutoTTU, uma solução tecnológica completa, para organização e controle de um pátio de motos.
 
-# SOLUÇÃO
+# 💡 Solução
 
 Começaremos pela instalação de sensores e scanners em cada uma das vagas do pátio. 
 Os sensores identificarão a presença de uma moto e, caso isso ocorra, o scanner fará a leitura do ID da moto por meio de um QR code pré-instalado, enviando os dados para o sistema. Dessa forma, saberemos exatamente qual a localização de cada moto.
