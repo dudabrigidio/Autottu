@@ -32,10 +32,19 @@ const Cadastro = (props : any) : React.ReactElement =>{
         
         .catch(()=>{ToastAndroid.show("Erro ao cadastrar usuário", 
             ToastAndroid.LONG); })
-        console.log(listaNova);    
+        console.log(listaNova);  
+        
+        limpar();
         return listaNova;
     } 
 
+    const limpar = () => {
+        setId("");
+        setNome("");
+        setEmail("");
+        setSenha("");
+        setTelefone("");
+    }
 
     return (
         <View style={styles.container}>

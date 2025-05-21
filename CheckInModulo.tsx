@@ -20,12 +20,19 @@ const CheckInModulo = (props : any) : React.ReactElement => {
     const gravar = () => { 
         setCheckIn( [ ...checkin, {idMoto:parseInt(idMoto), violada, observacao, data} ] )
         setToken(false);
+        limpar();
     }
 
     const novoCheckIn = () => {
         setToken(true);
     }
     
+    const limpar = () => {
+        setIdMoto("");
+        setNome("");
+        setObservacaoo("");
+        setData("");
+    }
 
     return (
 

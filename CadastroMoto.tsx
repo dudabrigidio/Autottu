@@ -33,10 +33,20 @@ const CadastroMoto = (props : any) : React.ReactElement =>{
         
         .catch(()=>{ToastAndroid.show("Erro ao cadastrar moto", 
             ToastAndroid.LONG); })
-        console.log(listaNova);    
+        console.log(listaNova); 
+        limpar();   
         return listaNova;
     } 
 
+    const limpar = () => {
+        setId("");
+        setPlaca("");
+        setModelo("");
+        setMarca("");
+        setAno("");
+        setStatus("");
+        setUrlFotos("");
+    }
     
 
     return (
