@@ -47,7 +47,7 @@ Rafael Bompadre Lima - RM556459
 
 ```bash
 # Clone o repositório
-git clone [https://github.com/usuario/projeto.git](https://github.com/dudabrigidio/Autottu.git)
+git clone https://github.com/dudabrigidio/Autottu.git
 
 # Instale as dependências
 npm install
