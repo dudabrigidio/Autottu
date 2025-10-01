@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { Button, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./estilos";
+import { styles } from "../estilos";
 
 const CadastroMoto = (props : any) : React.ReactElement =>{
 

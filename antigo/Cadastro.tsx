@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./estilos";
+import { styles } from "../estilos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Cadastro = (props : any) : React.ReactElement =>{

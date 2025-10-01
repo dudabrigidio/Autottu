@@ -1,9 +1,9 @@
 import { Button, Text, ToastAndroid, View } from "react-native";
-import { styles } from "./estilos";
+import { styles } from "../estilos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
-import { CheckIn } from "./CheckIn";
+import { CheckIn  } from "../model/CheckIn";
 
 const CheckInModulo = (props : any) : React.ReactElement => {
 

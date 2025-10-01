@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Text, ToastAndroid, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./estilos";
+import { styles } from "../estilos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Usuario } from "./Usuario";
+import { Usuario } from "../model/Usuario";
 
 const Login = (props : any) : React.ReactElement => {
 
@@ -28,7 +28,6 @@ const Login = (props : any) : React.ReactElement => {
             })
             }      
         }
-    
 
 
     return (

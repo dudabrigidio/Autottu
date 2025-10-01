@@ -1,10 +1,10 @@
 
 import { Button, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { styles } from "./estilos";
+import { styles } from "../estilos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Motos } from "./Motos";
+import { Motos } from "../model/Motos";
 
 
 const MotoItem = (props : any) : React.ReactElement => {
