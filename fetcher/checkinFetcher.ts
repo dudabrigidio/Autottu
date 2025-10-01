@@ -1,7 +1,7 @@
 import { CheckIn, CheckInErro } from "../model/CheckIn";
 import axios, { AxiosResponse } from 'axios';
 const apiBase = axios.create({
-    baseURL: "https://autottu-api-app.azurewebsites.net"
+    baseURL: "https://autottu-api-app.azurewebsites.net/"
 });
 
 interface SalvarCkCallback { 
@@ -21,8 +21,8 @@ interface AtualizarCkCallback {
 }
 
 const checkInFetcherSalvar =
-    (CheckIn : CheckIn, callback : SalvarCkCallback ) : void => {
-    apiBase.post( "/api/CheckIns", CheckIn )
+    (checkIn : CheckIn, callback : SalvarCkCallback ) : void => {
+    apiBase.post( "api/Checkins", checkIn )
     .then(()=>callback(true, ""))
     .catch(( erro : any)=>callback(false, erro))
 }
@@ -30,20 +30,21 @@ const checkInFetcherSalvar =
 
 const checkInFetcherApagar =
     (id : string, callback : ApagarCkCallback ) : void => {
-    apiBase.delete( `/api/CheckIns/${id}`)
+    apiBase.delete( `api/Checkins/${id}`)
     .then(()=>callback(true, ""))
     .catch(( erro : any)=>callback(false, erro))
 }
 
 const checkInFetcherAtualizar =
-    (id : string, CheckIn : CheckIn, callback : AtualizarCkCallback ) : void => {
-    apiBase.put( `/api/CheckIns/${id}`, CheckIn )
+    (id : string, checkIn : CheckIn, callback : AtualizarCkCallback ) : void => {
+    console.log(id);
+    apiBase.put( `api/Checkins/${id}`, checkIn )
     .then(()=>callback(true, ""))
     .catch(( erro : any)=>callback(false, erro))
 }
 
 const checkInFetcherLer = (callback : LerCkCallback) : void => { 
-    apiBase.get("/api/CheckIns")
+    apiBase.get("api/Checkins")
     .then(( resposta : AxiosResponse<any, any>)=>{
         const listaCheckIns = [];
         for ( const chave in resposta.data ){  

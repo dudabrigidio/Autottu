@@ -14,13 +14,25 @@ interface CheckInControlHook {
 }
 
 const useCheckInControl = () => {
-    const [checkIn, setCheckIn] = useState<CheckIn>({});
+    const [checkIn, setCheckIn] = useState<CheckIn>({idCheckin: "", idMoto: "",idUsuario:"", ativoChar : "", observacao: "", timeStamp: "", imagensUrl: ""});
     const [checkInErro, setCheckInErro] = useState<CheckInErro>({});
     const [checkInLista, setCheckInLista] = useState<CheckIn[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [sucesso, setSucesso] = useState<boolean>(false);
 
+    const [idCheckinAlterado, setIdCheckinAlterado] = useState<string | null>(null);
+    const clearCheckIn = () => {
+        setCheckIn({
+            idCheckin: null, 
+            idMoto: "",
+            idUsuario:"", 
+            ativoChar : "", 
+            observacao: "", 
+            timeStamp: "", 
+            imagensUrl: ""
+        });
+    }
     const navigation = useNavigation<RootScreenNavigationProp>();
 
     const salvarCheckInCallback : SalvarCkCallback = 
@@ -28,7 +40,7 @@ const useCheckInControl = () => {
         if (success) {
             setMensagem("CheckIn realizado com sucesso");
             lerCheckIn();
-            navigation.navigate("Logado", {screen: "MotosLista"});
+            navigation.navigate("CheckIn", {screen: "CheckInLista"});
         } else {
             setMensagem(msg);
             setCheckInErro( errosCampos ??{});
@@ -42,8 +54,9 @@ const useCheckInControl = () => {
     (success : boolean, msg: string, errosCampos ?: CheckInErro) => {
         if (success) {
             setMensagem("CheckIn atualizado com sucesso");
+            clearCheckIn();
             lerCheckIn();
-            navigation.navigate("Logado", {screen: "MotosLista"});
+            navigation.navigate("CheckIn", {screen: "RealizarCheckIn"});
         } else {
             setMensagem(msg);
             setCheckInErro( errosCampos ??{});
@@ -68,6 +81,7 @@ const useCheckInControl = () => {
         setSucesso(success);
         if(success) {
             setMensagem("Checkin apagado com sucesso");
+            lerCheckIn();
         }
         else {
             setMensagem(msg);
@@ -78,12 +92,14 @@ const useCheckInControl = () => {
     const salvarCheckIn = () => {
         setLoading(true);
         setCheckInErro({});
-        if (checkIn.id == null) {
+        console.log("idCheckIn:", checkIn.idCheckin, "idCheckinAlterado: ", idCheckinAlterado);
+
+        if (checkIn.idCheckin == null || checkIn.idCheckin == '' || checkIn.idCheckin !== idCheckinAlterado ) {
             checkInServiceSalvar ( checkIn, salvarCheckInCallback);
         } else {
-            checkInServiceAtualizar ( checkIn.id, checkIn, atualizarCheckInCallback );
+            checkInServiceAtualizar ( checkIn.idCheckin, checkIn, atualizarCheckInCallback );
         }
-        navigation.navigate("Logado", {screen: "MotosLista"});
+        navigation.navigate("CheckIn", {screen: "CheckInLista"});
     }
 
     const lerCheckIn = () => {
@@ -96,26 +112,44 @@ const useCheckInControl = () => {
         setLoading(true);
         setCheckInErro({});
         checkInServiceApagar ( id, apagarCheckInCallback);
+        navigation.navigate("CheckIn", {screen: "CheckInLista"});
+
     }
 
     const atualizarCheckIn = (id : string) => {
+        console.log(id);
+        setIdCheckinAlterado(id);
+        console.log("idCheckinAlterado:", idCheckinAlterado);
+
         setCheckInErro({});
         const checkInFiltrados = checkInLista.filter(
-            (c: CheckIn)=> c.id == id
+            (c: CheckIn)=> c.idCheckin == id
         );
         if (checkInFiltrados.length>0) {
             setCheckIn(checkInFiltrados[0]);
-            navigation.navigate("Logado", {screen: "MotosLista"});
+            navigation.navigate("CheckIn", {screen: "RealizarCheckIn"});
         }
+        setIdCheckinAlterado(id);
+
     }
 
-    const handleContato = (txt: string, campo: string) => {
+    const handleCheckIn = (txt: string, campo: string) => {
         const obj = {...checkIn};
-        obj[campo as keyof typeof obj] = txt;
+        if (campo === "idCheckin") {
+
+            if (txt.trim() === "") {
+                obj[campo as keyof typeof obj] = null;
+            } else {
+                const numValue = parseInt(txt);
+                obj[campo as keyof typeof obj] = isNaN(numValue) ? null : numValue;
+            }
+        } else {
+            obj[campo as keyof typeof obj] = txt;
+        }
         setCheckIn(obj);
     }
 
-    return { loading, mensagem, sucesso, checkIn, checkInErro, checkInLista, salvarCheckIn, lerCheckIn, apagarCheckIn, atualizarCheckIn};
+    return { loading, mensagem, sucesso, checkIn, checkInErro, checkInLista, salvarCheckIn, lerCheckIn, apagarCheckIn, atualizarCheckIn, handleCheckIn};
 }
 
 export {useCheckInControl};

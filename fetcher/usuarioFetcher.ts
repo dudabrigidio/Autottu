@@ -1,7 +1,7 @@
 import { Usuario, UsuarioErro } from "../model/Usuario";
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 const apiBase = axios.create({
-    baseURL: "https://autottu-api-app.azurewebsites.net"
+    baseURL: "https://autottu-api-app.azurewebsites.net/"
 });
 
 
@@ -21,33 +21,38 @@ interface AtualizarUsuarioCallback {
     (sucesso: boolean, mensagem: string, errosCampos?: UsuarioErro) : void;
 }
 
-const usuarioFetcherSalvar =
-    (usuario : Usuario, callback: SalvarUsuarioCallback, token?: string) : void => {
-        const config : AxiosRequestConfig = {headers: {"Authorization": `Bearer ${token}`}};
-        console.log("Headers: ", config);
-        apiBase.post( "/api/Usuarios", usuario, config )
-    .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
-    }
 
+const usuarioFetcherSalvar = (
+    usuario: Usuario, callback: SalvarUsuarioCallback, token?: string): void => {
+    const config: AxiosRequestConfig = {
+        headers: {
+        ...(token ? {"Authorization": `Bearer ${token}` } : {}),
+        },
+    };
+    console.log("Headers: ", config);
+    apiBase
+        .post("api/Usuarios", usuario)
+        .then(() => callback(true, ""))
+        .catch((erro: any) => callback(false, erro));
+    };
 
 const usuarioFetcherApagar =
     (id : string, callback: ApagarUsuarioCallback) : void => {
-        apiBase.delete( `/api/Usuarios/${id}`)
+        apiBase.delete( `api/Usuarios/${id}`)
     .then(()=>callback(true, ""))
     .catch(( erro : any)=>callback(false, erro))
     }
 
 const usuarioFetcherAtualizar =
-    (id : string, Usuario: Usuario, callback: AtualizarUsuarioCallback) : void => {
-        apiBase.put( `/api/Usuarios/${id}`)
+    (id : string, usuario: Usuario, callback: AtualizarUsuarioCallback) : void => {
+        apiBase.put( `api/Usuarios/${id}`, usuario)
     .then(()=>callback(true, ""))
     .catch(( erro : any)=>callback(false, erro))
     }
 
 
 const  usuarioFetcherLer = (callback : LerUsuarioCallback) : void => { 
-    apiBase.get("/api/Usuarios")
+    apiBase.get("api/Usuarios")
     .then(( resposta : AxiosResponse<any, any>)=>{
         const listaUsuario = [];
         for ( const chave in resposta.data ){  

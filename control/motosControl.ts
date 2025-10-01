@@ -14,21 +14,37 @@ interface MotosControlHook {
 }
 
 const useMotosControl = () => {
-    const [motos, setMotos] = useState<Motos>({});
+    const [motos, setMotos] = useState<Motos>({ idMoto: "", placa: "",modelo: "", marca: "", ano: "",ativoChar:"", fotoUrl: ""});
     const [motosErro, setMotosErro] = useState<MotosErro>({});
     const [motosLista, setMotosLista] = useState<Motos[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [sucesso, setSucesso] = useState<boolean>(false);
 
+    const [idMotoAlterada, setIdMotoAlterada] = useState<string | null>(null);
+
+    const clearMoto = () => {
+        setMotos({
+            idMoto: null,
+            placa: "",
+            modelo: "",
+            marca: "",
+            ano: "",
+            ativoChar: "",
+            fotoUrl: ""
+        });
+        setIdMotoAlterada(null);
+    }
+        
     const navigation = useNavigation<RootScreenNavigationProp>();
 
     const salvarMotosCallback : SalvarMotoCallback = 
     (success : boolean, msg: string, errosCampos?: MotosErro ) => {
         if (success) {
             setMensagem("Motos Cadastrado com sucesso");
+            clearMoto();
             lerMotos();
-            navigation.navigate("Logado", {screen: "MotosLista"});
+            navigation.navigate("Motos", {screen: "MotosLista"});
         } else {
             setMensagem(msg);
             setMotosErro( errosCampos ??{});
@@ -42,8 +58,9 @@ const useMotosControl = () => {
     (success : boolean, msg: string, errosCampos ?: MotosErro) => {
         if (success) {
             setMensagem("Motos Atualizado com sucesso");
+            clearMoto();
             lerMotos();
-            navigation.navigate("Logado", {screen: "MotosLista"});
+            navigation.navigate("Motos", {screen: "MotosLista"});
         } else {
             setMensagem(msg);
             setMotosErro( errosCampos ??{});
@@ -68,6 +85,7 @@ const useMotosControl = () => {
         setSucesso(success);
         if(success) {
             setMensagem("Motos apagado com sucesso");
+            setLoading(true);
         }
         else {
             setMensagem(msg);
@@ -78,12 +96,13 @@ const useMotosControl = () => {
     const salvarMotos = () => {
         setLoading(true);
         setMotosErro({});
-        if (motos.id == null) {
-            motoServiceSalvar ( motos, salvarMotosCallback);
+        console.log("idMoto:", motos.idMoto, "idMotoalterada: ", idMotoAlterada,"tipo:", typeof motos.idMoto);
+        
+        if (motos.idMoto == null || motos.idMoto === "" || motos.idMoto !== idMotoAlterada) {
+            motoServiceSalvar(motos, salvarMotosCallback);
         } else {
-            motoServiceAtualizar ( motos.id, motos, atualizarMotosCallback );
+            motoServiceAtualizar(motos.idMoto, motos, atualizarMotosCallback);
         }
-        navigation.navigate("Logado", {screen: "MotosLIsta"});
     }
 
     const lerMotos = () => {
@@ -96,22 +115,36 @@ const useMotosControl = () => {
         setLoading(true);
         setMotosErro({});
         motoServiceApagar ( id, apagarMotosCallback);
+        lerMotos();
     }
 
     const atualizarMotos = (id : string) => {
+        setIdMotoAlterada(id); 
+        console.log(setIdMotoAlterada);
         setMotosErro({});
         const motosFiltrados = motosLista.filter(
-            (m: Motos)=> m.id == id
+            (m: Motos)=> m.idMoto == id
         );
-        if (motosFiltrados.length>0) {
+        if (motosFiltrados.length > 0) {
             setMotos(motosFiltrados[0]);
-            navigation.navigate("Logado", {screen: "MotosCadastro"});
+            navigation.navigate("Motos", {screen: "MotosCadastro"});
         }
     }
 
     const handleMotos = (txt: string, campo: string) => {
         const obj = {...motos};
-        obj[campo as keyof typeof obj] = txt;
+        if (campo === "idMoto") {
+            // Se o campo estiver vazio (após remover espaços), define como null
+            // Senão, converte para number
+            if (txt.trim() === "") {
+                obj[campo as keyof typeof obj] = null;
+            } else {
+                const numValue = parseInt(txt);
+                obj[campo as keyof typeof obj] = isNaN(numValue) ? null : numValue;
+            }
+        } else {
+            obj[campo as keyof typeof obj] = txt;
+        }
         setMotos(obj);
     }
 

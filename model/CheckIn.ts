@@ -2,17 +2,24 @@ import {object, string, ObjectSchema, InferType, number} from 'yup';
 
 
 interface CheckInErro {
+    idCheckin?: string
     idMoto?: string
-    violada? : string
+    idUsuario?: string
+    ativoChar? : string
     observacao?: string
-    data?: string
+    timeStamp?: string
+    imagensUrl?: string
 }
 
+
 const checkinSchema : ObjectSchema<any, any> = object({
+    idCheckin: number().nullable().default(null),
     idMoto: number().nullable().default(null),
-    nome: string().required("Por favor insira S (para sim) ou N (para não)"),
+    idUsuario: number().nullable().default(null),
+    ativoChar: string().required("Por favor insira S (para sim) ou N (para não)"),
     observacao: string().required("Insira descrição do estado da moto: "),
-    data: string().required("Por favor insira uma data")
+    timeStamp: string().required("Por favor insira uma data"),
+    imagensUrl : string().required("Insira URL das imagens da moto")
 })
 
 type CheckIn = InferType<typeof checkinSchema>;

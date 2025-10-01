@@ -11,12 +11,13 @@ interface UsuarioViewProps {
 
 }
 
-const CadastroUsuarioView: FC<UsuarioViewProps> = ( props) => {
+const AlterarPerfilView: FC<UsuarioViewProps> = ( props) => {
     const {loading, mensagem, sucesso, 
         usuario, usuarioErro,
-        salvarUsuario, handleUsuario, navigateLogin} = useUsuarioControl();
+        salvarUsuario, handleUsuario, navigateLogin, salvarAlteracaoUsuario} = useUsuarioControl();
     return (
-        <View style={styles.container}>
+        <View style={styles.container2}>
+            <Text style={styles.itens}>ALTERAR DADOS DO USUÁRIO</Text>
             <Text style={{color: sucesso ? "green" : "red", 
                 fontSize: 18}}>{mensagem}</Text>
                 <Text style={{color: "red"}}>{usuarioErro.idUsuario ? String(usuario.idUsuario) : ""}</Text>
@@ -31,8 +32,7 @@ const CadastroUsuarioView: FC<UsuarioViewProps> = ( props) => {
                 <TextInput value={usuario.telefone ? String(usuario.telefone) : ""} onChangeText={(txt:string) => handleUsuario(txt, "telefone")} style={styles.input} placeholder="Telefone:"/>
 
                 <View style={styles.espaco}>
-                    <Button title="Cadastrar" onPress={salvarUsuario}/>
-                    <Button title='Já tenho cadastro!' onPress={navigateLogin}/>
+                    <Button title='ALTERAR DADOS' onPress={salvarAlteracaoUsuario}/>
                 </View>
                 
                 <Image
@@ -43,4 +43,4 @@ const CadastroUsuarioView: FC<UsuarioViewProps> = ( props) => {
     )
 }
 
-export { CadastroUsuarioView};
+export { AlterarPerfilView};

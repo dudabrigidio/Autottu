@@ -5,10 +5,12 @@ import { loginServicoLogar} from '../service/loginService';
 import { ContextoPrincipal } from '../contexto/contextoPrincipal';
 import { useNavigation } from '@react-navigation/native';
 import { RootScreenNavigationProp } from '../navigation/navigationParams';
+import { useAppControl } from './appControl';
 
 const useLoginControl = () => {
     const navigation = useNavigation<RootScreenNavigationProp>();
     const {token, emailProfile, setProfile} = useContext(ContextoPrincipal);
+
 
     const [usuario, setUsuario] = useState<Usuario>({
         email: "", senha: ""
@@ -31,7 +33,6 @@ const useLoginControl = () => {
             if ( success && token != undefined) {
                 setProfile(token, usuario.email??null);
                 setMensagem("Usuario logado com sucesso!");
-                navigation.navigate("Logado", {screen: "CheckIn"} );
             } else {
                 console.log(msg);
                 setMensagem("Erro ao logar usuário");
@@ -40,16 +41,16 @@ const useLoginControl = () => {
                 }
             }
             setSucesso(true);
-            loginServicoLogar( usuario, callback);
         }
-
+        
+        loginServicoLogar( usuario, callback);
     }
 
     const navigateCadastro = () => {
         navigation.navigate("UsuarioCadastro");
     }
 
-    return { usuario, usuarioErro, emailProfile, handleLogin, login, navigateCadastro, sucesso, mensagem, loading}
+    return { usuario, usuarioErro, token, emailProfile, handleLogin, login, navigateCadastro, sucesso, mensagem, loading}
 }
 
 export {useLoginControl};

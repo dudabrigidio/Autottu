@@ -1,7 +1,7 @@
-import { Usuario, UsuarioErro } from "../model/Usuario";
+import { Usuario, UsuarioErro, Login } from "../model/Usuario";
 import axios, { AxiosResponse } from 'axios';
 const apiBase = axios.create({
-    baseURL: "https://autottu-api-app.azurewebsites.net"
+    baseURL: "https://autottu-api-app.azurewebsites.net/"
 });
 
 
@@ -11,13 +11,22 @@ interface LogarCallback {
 
 const loginFetcherLogar = 
     (usuario: Usuario, callback : LogarCallback) : void => {
-        const objUsuario = { email: usuario.email, password: usuario.senha, returnSecretToken: true}
-        apiBase.post(`/api/Login`, objUsuario)
+        // Criando objeto Login com a estrutura exata que o backend espera
+        const loginData: Login = {
+            email: usuario.email,
+            senha: usuario.senha
+        };
+        
+        console.log("Dados de login enviados:", loginData);
+        
+        apiBase.post(`api/Usuarios/Login`, loginData)
         .then(( response : AxiosResponse<any, any>)=> {
-            callback(true, "", {}, response.data.idToken)
+            callback(true, response.data, {}, response.data.idToken)
         })
         .catch((erro : any)=> {
-            callback(false, erro[0], {}, undefined)
+
+            const errorMessage = erro.response?.data?.error || erro.response?.data?.message || erro.message || "Erro desconhecido";
+            callback(false, errorMessage, {}, undefined)
         })
     }
 

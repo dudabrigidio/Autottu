@@ -1,22 +1,31 @@
 import { NavigationProp } from "@react-navigation/native";
 
-type RootStackParamList = {
+type RootParamList = {
     Login: undefined;
     UsuarioCadastro:undefined;   
-    Logado: {screen : string};
+    UsuariosCadastrados: undefined;
+    Motos: {screen : string};
+    CheckIn: {screen : string};
+    AlterarPerfil: undefined;
 }
 
 
-type LogadoStackParamList = {
-    Perfil: undefined;
-    CheckIn: undefined;
+type MotosParamList = {
     MotosCadastro: undefined;
     MotosLista: undefined;
 }
 
-type RootScreenNavigationProp = NavigationProp<RootStackParamList, 'Login'>;
-type MotosScreenNavigationProp = NavigationProp<LogadoStackParamList, 'CheckIn'>;
+type CheckInParamList = {
+    RealizarCheckIn: undefined;
+    CheckInLista: undefined;
+}
+
+type RootScreenNavigationProp = NavigationProp<RootParamList, 'Login'>;
+type MotosScreenNavigationProp = NavigationProp<MotosParamList, 'MotosCadastro'>;
+type CheckInScreenNavigationProp = NavigationProp<CheckInParamList, 'RealizarCheckIn'>;
 
 
-export { RootStackParamList, RootScreenNavigationProp, 
-    LogadoStackParamList, MotosScreenNavigationProp};
+
+export { RootParamList, RootScreenNavigationProp, 
+    MotosParamList, MotosScreenNavigationProp,
+    CheckInScreenNavigationProp, CheckInParamList};

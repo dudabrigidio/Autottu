@@ -47,7 +47,6 @@ const useUsuarioControl = () => {
         if (success) {
             setMensagem("Usuario Atualizado com sucesso");
             lerUsuario();
-            navigation.navigate("Logado", {screen: "Perfil"});
         } else {
             setMensagem(msg);
             setUsuarioErro( errosCampos ??{});
@@ -83,7 +82,7 @@ const useUsuarioControl = () => {
         setLoading(true);
         setUsuarioErro({});
         usuarioServiceSalvar(usuario, salvarUsuarioCallback, token);
-
+        
         console.log(usuario);
     }
 
@@ -106,9 +105,15 @@ const useUsuarioControl = () => {
         );
         if (usuariosFiltrados.length>0) {
             setUsuario(usuariosFiltrados[0]);
-            navigation.navigate("Logado", {screen: "Perfil"});
+            
         }
     }
+
+    const salvarAlteracaoUsuario = () => {
+            setLoading(true);
+            setUsuarioErro({});
+            usuarioServiceAtualizar(usuario.idUsuario, usuario, atualizarUsuarioCallback);
+        }
 
     const handleUsuario = (txt: string, campo: string) => {
         const obj = {...usuario};
@@ -120,7 +125,7 @@ const useUsuarioControl = () => {
         navigation.navigate("Login");
     }
 
-    return { loading, mensagem, sucesso, usuario, usuarioErro, usuarioLista, salvarUsuario, lerUsuario, apagarUsuario, atualizarUsuario, handleUsuario, navigateLogin};
+    return { loading, mensagem, sucesso, usuario, usuarioErro, usuarioLista, salvarUsuario, lerUsuario, apagarUsuario, atualizarUsuario, handleUsuario, navigateLogin, salvarAlteracaoUsuario};
 }
 
 export {useUsuarioControl};
