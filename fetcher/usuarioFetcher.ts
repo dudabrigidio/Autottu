@@ -24,12 +24,7 @@ interface AtualizarUsuarioCallback {
 
 const usuarioFetcherSalvar = (
     usuario: Usuario, callback: SalvarUsuarioCallback, token?: string): void => {
-    const config: AxiosRequestConfig = {
-        headers: {
-        ...(token ? {"Authorization": `Bearer ${token}` } : {}),
-        },
-    };
-    console.log("Headers: ", config);
+        console.log(usuario);
     apiBase
         .post("api/Usuarios", usuario)
         .then(() => callback(true, ""))
