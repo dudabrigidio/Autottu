@@ -58,7 +58,8 @@ npm run web
 npm run android
 ```
 
-###Dependências principais (20):
+### Dependências principais (20):
+```bash
 @expo/metro-runtime
 @react-native-async-storage/async-storage
 @react-navigation/bottom-tabs
@@ -79,3 +80,4 @@ react-native-safe-area-context
 react-native-screens
 react-native-web
 yup
+```
