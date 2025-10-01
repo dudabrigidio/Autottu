@@ -56,3 +56,26 @@ npx expo start
 npm run web
 # ou
 npm run android
+```
+
+###Dependências principais (20):
+@expo/metro-runtime
+@react-native-async-storage/async-storage
+@react-navigation/bottom-tabs
+@react-navigation/drawer
+@react-navigation/native
+@react-navigation/native-stack
+axios
+expo
+expo-status-bar
+navigation
+react
+react-dom
+react-native
+react-native-gesture-handler
+react-native-get-random-values
+react-native-reanimated
+react-native-safe-area-context
+react-native-screens
+react-native-web
+yup
