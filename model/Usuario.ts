@@ -9,7 +9,6 @@ interface UsuarioErro {
 }
 
 const usuarioSchema : ObjectSchema<any, any> = object({
-    idUsuario: string().nullable().default(null),
     nome: string().required("Insira seu nome"),
     senha: string().required("Escolha uma senha"),
     email : string()

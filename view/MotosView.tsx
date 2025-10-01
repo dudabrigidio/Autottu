@@ -31,9 +31,7 @@ const MotosView: FC<MotosViewProps> = ( props ) => {
                     {()=> { return (
                         <View style={styles.container2}>
             
-                            <Text style={{color: "red"}}>{motosErro.idMoto}</Text>
-                            <TextInput value={motos.idMoto ? String(motos.idMoto) : ""} 
-                            onChangeText={(txt : string) => handleMotos(txt, "idMoto")} keyboardType="numeric" style={styles.input} placeholder="Id da Moto:"/>
+
                             <Text style={{color: "red"}}>{motosErro.placa}</Text>
                             <TextInput value={motos.placa} 
                             onChangeText={(txt : string) => handleMotos(txt, "placa")} style={styles.input} placeholder="Placa:"/>

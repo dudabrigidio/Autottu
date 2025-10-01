@@ -6,7 +6,7 @@ const usuarioServiceSalvar =
     ( usuario: Usuario, callback : SalvarUsuarioCallback, token?: string) : void => {
         usuarioSchema.validate (usuario, {abortEarly: false})
         .then(()=>{
-            usuarioFetcherSalvar( usuario, callback, token);
+            usuarioFetcherSalvar( usuario, callback);
         })
         .catch((errors : ValidationError)=> {
             const usuarioErros: UsuarioErro = {}
@@ -36,11 +36,18 @@ const usuarioServiceApagar =
 
 const usuarioServiceAtualizar = 
     (id: string, usuario: Usuario, callback: AtualizarUsuarioCallback) : void => {
+        console.log("=== SERVICE ATUALIZAR USUARIO ===");
+        console.log("ID:", id);
+        console.log("Usuário para validação:", usuario);
+        
         usuarioSchema.validate (usuario, {abortEarly: false})
         .then(()=>{
+            console.log("Validação passou, chamando fetcher...");
             usuarioFetcherAtualizar(id, usuario, callback);
         })
         .catch((errors :ValidationError)=>{
+            console.log("Erro de validação no PUT:", errors.message);
+            console.log("Detalhes dos erros:", errors.inner);
             const usuarioErros: UsuarioErro = {}
             errors.inner.forEach( (err: ValidationError) => {
                 usuarioErros[err.path as keyof typeof usuarioErros] = err.message;

@@ -16,7 +16,7 @@ interface UsuarioControlHook {
 
 
 const useUsuarioControl = () => {
-    const [usuario, setUsuario] = useState<Usuario>({idUsuario: "",nome: "",senha: "",email: "",telefone: ""});
+    const [usuario, setUsuario] = useState<Usuario>({idUsuario: "", nome: "",senha: "",email: "",telefone: ""});
     const [usuarioErro, setUsuarioErro] = useState<UsuarioErro>({});
     const [usuarioLista, setUsuarioLista] = useState<Usuario[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
@@ -81,9 +81,14 @@ const useUsuarioControl = () => {
     const salvarUsuario = () => {
         setLoading(true);
         setUsuarioErro({});
-        usuarioServiceSalvar(usuario, salvarUsuarioCallback, token);
         
-        console.log(usuario);
+        // Para POST (criação), remover o idUsuario completamente
+        const { idUsuario, ...usuarioParaSalvar } = usuario;
+        console.log("=== SALVAR USUARIO (POST) ===");
+        console.log("Usuário original:", usuario);
+        console.log("Usuário para salvar (sem idUsuario):", usuarioParaSalvar);
+        
+        usuarioServiceSalvar(usuarioParaSalvar, salvarUsuarioCallback, token);
     }
 
     const lerUsuario = () => {
@@ -92,26 +97,30 @@ const useUsuarioControl = () => {
         usuarioServiceLer(lerUsuarioCallback);
     }
 
-    const apagarUsuario = (id: string) => {
+    const apagarUsuario = (idUsuario: string) => {
         setLoading(true);
         setUsuarioErro({});
-        usuarioServiceApagar ( id, apagarUsuarioCallback);
+        usuarioServiceApagar ( idUsuario, apagarUsuarioCallback);
     }
 
     const atualizarUsuario = (id : string) => {
         setUsuarioErro({});
+        console.log(id);
         const usuariosFiltrados = usuarioLista.filter(
-            (u: Usuario)=> u.id == id
+            (u: Usuario)=> u.idUsuario == id
         );
         if (usuariosFiltrados.length>0) {
             setUsuario(usuariosFiltrados[0]);
-            
+            console.log("Usuário selecionado para edição:", usuariosFiltrados[0]);
         }
     }
 
     const salvarAlteracaoUsuario = () => {
             setLoading(true);
             setUsuarioErro({});
+            console.log("=== SALVAR ALTERAÇÃO USUARIO (PUT) ===");
+            console.log("ID do usuário:", usuario.idUsuario);
+            console.log("Dados completos do usuário:", usuario);
             usuarioServiceAtualizar(usuario.idUsuario, usuario, atualizarUsuarioCallback);
         }
 

@@ -56,7 +56,7 @@ const useCheckInControl = () => {
             setMensagem("CheckIn atualizado com sucesso");
             clearCheckIn();
             lerCheckIn();
-            navigation.navigate("CheckIn", {screen: "RealizarCheckIn"});
+            navigation.navigate("CheckIn", {screen: "CheckInLista"});
         } else {
             setMensagem(msg);
             setCheckInErro( errosCampos ??{});
@@ -90,12 +90,13 @@ const useCheckInControl = () => {
     }
 
     const salvarCheckIn = () => {
+        const { idCheckin, ...checkInParaSalvar } = checkIn;
         setLoading(true);
         setCheckInErro({});
         console.log("idCheckIn:", checkIn.idCheckin, "idCheckinAlterado: ", idCheckinAlterado);
 
         if (checkIn.idCheckin == null || checkIn.idCheckin == '' || checkIn.idCheckin !== idCheckinAlterado ) {
-            checkInServiceSalvar ( checkIn, salvarCheckInCallback);
+            checkInServiceSalvar ( checkInParaSalvar, salvarCheckInCallback);
         } else {
             checkInServiceAtualizar ( checkIn.idCheckin, checkIn, atualizarCheckInCallback );
         }

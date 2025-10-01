@@ -32,7 +32,7 @@ const AlterarPerfilView: FC<UsuarioViewProps> = ( props) => {
                 <TextInput value={usuario.telefone ? String(usuario.telefone) : ""} onChangeText={(txt:string) => handleUsuario(txt, "telefone")} style={styles.input} placeholder="Telefone:"/>
 
                 <View style={styles.espaco}>
-                    <Button title='ALTERAR DADOS' onPress={salvarAlteracaoUsuario}/>
+                    <Button title='ALTERAR' onPress={salvarAlteracaoUsuario}/>
                 </View>
                 
                 <Image

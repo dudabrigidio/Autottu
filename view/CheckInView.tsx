@@ -38,9 +38,6 @@ const CheckInView: FC<CheckInViewProps> = ( props ) => {
                         <View style={styles.container2}>
             
                             <StatusBar style='auto'/>
-                            <Text style={{color: "red"}}>{checkInErro.idCheckin}</Text>
-                            <TextInput value={checkIn.idCheckin  ? String(checkIn.idCheckin) : ""} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "idCheckIn")} keyboardType="numeric" style={styles.input} placeholder="Id do CheckIn:"/>
 
                             <Text style={{color: "red"}}>{checkInErro.idMoto}</Text>
                             <TextInput value={checkIn.idMoto  ? String(checkIn.idMoto) : ""} 

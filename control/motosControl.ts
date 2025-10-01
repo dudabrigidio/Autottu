@@ -94,12 +94,13 @@ const useMotosControl = () => {
     }
 
     const salvarMotos = () => {
+        const { idMoto, ...motosParaSalvar } = motos;
         setLoading(true);
         setMotosErro({});
         console.log("idMoto:", motos.idMoto, "idMotoalterada: ", idMotoAlterada,"tipo:", typeof motos.idMoto);
         
         if (motos.idMoto == null || motos.idMoto === "" || motos.idMoto !== idMotoAlterada) {
-            motoServiceSalvar(motos, salvarMotosCallback);
+            motoServiceSalvar(motosParaSalvar, salvarMotosCallback);
         } else {
             motoServiceAtualizar(motos.idMoto, motos, atualizarMotosCallback);
         }

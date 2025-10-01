@@ -23,26 +23,55 @@ interface AtualizarUsuarioCallback {
 
 
 const usuarioFetcherSalvar = (
-    usuario: Usuario, callback: SalvarUsuarioCallback, token?: string): void => {
-        console.log(usuario);
+    usuario: Usuario, callback: SalvarUsuarioCallback): void => {
+        console.log("=== POST USUARIO ===");
+        console.log("Dados do usuário:", JSON.stringify(usuario, null, 2));
+        console.log("URL:", "api/Usuarios");
+        
     apiBase
         .post("api/Usuarios", usuario)
         .then(() => callback(true, ""))
-        .catch((erro: any) => callback(false, erro));
+        .catch((erro: any) => {
+            console.error("Erro ao salvar usuário:", erro);
+            const errorMessage = erro.response?.data?.message || 
+                    erro.response?.data?.error || 
+                    erro.message || 
+                    "Erro interno do servidor";
+            callback(false, errorMessage);
+        });
     };
 
 const usuarioFetcherApagar =
-    (id : string, callback: ApagarUsuarioCallback) : void => {
-        apiBase.delete( `api/Usuarios/${id}`)
+    (idUsuario : string, callback: ApagarUsuarioCallback) : void => {
+        apiBase.delete( `api/Usuarios/${idUsuario}`)
     .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
+    .catch(( erro : any) => {
+        console.error("Erro ao apagar usuário:", erro);
+        const errorMessage = erro.response?.data?.message || 
+            erro.response?.data?.error || 
+            erro.message || 
+            "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
     }
 
 const usuarioFetcherAtualizar =
-    (id : string, usuario: Usuario, callback: AtualizarUsuarioCallback) : void => {
-        apiBase.put( `api/Usuarios/${id}`, usuario)
+    (idUsuario : string, usuario: Usuario, callback: AtualizarUsuarioCallback) : void => {
+        console.log("=== PUT USUARIO ===");
+        console.log("ID do usuário:", idUsuario);
+        console.log("Dados do usuário:", JSON.stringify(usuario, null, 2));
+        console.log("URL:", `api/Usuarios/${idUsuario}`);
+        
+        apiBase.put( `api/Usuarios/${idUsuario}`, usuario)
     .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
+    .catch(( erro : any) => {
+        console.error("Erro ao atualizar usuário:", erro);
+        const errorMessage = erro.response?.data?.message || 
+            erro.response?.data?.error || 
+            erro.message || 
+            "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
     }
 
 
@@ -57,7 +86,14 @@ const  usuarioFetcherLer = (callback : LerUsuarioCallback) : void => {
         }
         callback(true, `Foram lidos ${listaUsuario.length} Usuarios`, listaUsuario);
     })
-    .catch((erro : any)=>callback(false, erro))
+    .catch((erro : any) => {
+        console.error("Erro ao ler usuários:", erro);
+        const errorMessage = erro.response?.data?.message || 
+                erro.response?.data?.error || 
+                erro.message || 
+                "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
 }
 
 

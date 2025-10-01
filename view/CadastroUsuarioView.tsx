@@ -17,10 +17,7 @@ const CadastroUsuarioView: FC<UsuarioViewProps> = ( props) => {
         salvarUsuario, handleUsuario, navigateLogin} = useUsuarioControl();
     return (
         <View style={styles.container}>
-            <Text style={{color: sucesso ? "green" : "red", 
-                fontSize: 18}}>{mensagem}</Text>
-                <Text style={{color: "red"}}>{usuarioErro.idUsuario ? String(usuario.idUsuario) : ""}</Text>
-                <TextInput value={usuario.idUsuario} onChangeText={(txt:string) => handleUsuario(txt, "idUsuario")} keyboardType="numeric" style={styles.input} placeholder="Id do usuário:"/>
+
                 <Text style={{color: "red"}}>{usuarioErro.nome}</Text>
                 <TextInput value={usuario.nome} onChangeText={(txt:string) => handleUsuario(txt, "nome")}  style={styles.input} placeholder="Nome:"/>
                 <Text style={{color: "red"}}>{usuarioErro.email}</Text>
