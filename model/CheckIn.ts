@@ -14,8 +14,8 @@ interface CheckInErro {
 
 const checkinSchema : ObjectSchema<any, any> = object({
     idCheckin: number().nullable().default(null),
-    idMoto: number().nullable().default(null),
-    idUsuario: number().nullable().default(null),
+    idMoto: number().required("Insira um id de uma moto válido").default(null),
+    idUsuario: number().required("Insira um id de um usuário válido").default(null),
     ativoChar: string().required("Por favor insira S (para sim) ou N (para não)"),
     observacao: string().required("Insira descrição do estado da moto: "),
     timeStamp: string().required("Por favor insira uma data"),

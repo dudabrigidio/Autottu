@@ -10,9 +10,16 @@ const motoServiceSalvar =
         })
         .catch((errors : ValidationError)=> {
             const motosErros: MotosErro = {}
-            errors.inner.forEach((err: ValidationError) => {
-                motosErros[err.path as keyof typeof motosErros] = err.message;
-            });
+            if (errors.inner && errors.inner.length > 0) {
+                errors.inner.forEach((err: ValidationError) => {
+                    if (err.path) {
+                        motosErros[err.path as keyof MotosErro] = err.message;
+                    }
+                });
+            }
+            else if (errors.path) {
+                motosErros[errors.path as keyof MotosErro] = errors.message;
+            }
             callback(false, errors.message, motosErros);
         })
     }
@@ -35,9 +42,16 @@ const motoServiceAtualizar =
         })
         .catch((errors :ValidationError)=>{
             const motosErros: MotosErro = {}
-            errors.inner.forEach( (err: ValidationError) => {
-                motosErros[err.path as keyof typeof motosErros] = err.message;
-            });
+            if (errors.inner && errors.inner.length > 0) {
+                errors.inner.forEach((err: ValidationError) => {
+                    if (err.path) {
+                        motosErros[err.path as keyof MotosErro] = err.message;
+                    }
+                });
+            }
+            else if (errors.path) {
+                motosErros[errors.path as keyof MotosErro] = errors.message;
+            }
             callback(false, errors.message, motosErros);
         })
     }

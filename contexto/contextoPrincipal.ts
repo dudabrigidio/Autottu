@@ -5,13 +5,17 @@ interface ContextoPrincipalCorpo {
     emailProfile: string | null
     setProfile: (token : string | null, email : string | null) => void
     clearProfile: () => void
+    tema: 'light' | 'dark'
+    defineTema: () => void 
 }
 
 const corpoVazioContextoPrincipal : ContextoPrincipalCorpo = {
     token: undefined,
     emailProfile: null,
     setProfile: (token : string | null, email : string | null) => {},
-    clearProfile: () => {}
+    clearProfile: () => {},
+    tema: 'light',
+    defineTema: () => {}
 }
 
 const ContextoPrincipal = createContext(corpoVazioContextoPrincipal);

@@ -24,24 +24,45 @@ const checkInFetcherSalvar =
     (checkIn : CheckIn, callback : SalvarCkCallback ) : void => {
     apiBase.post( "api/Checkins", checkIn )
     .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
-}
+    .catch(( erro : any) => {
+        console.error("Erro ao salvar check-in:", erro);
+        const errorMessage = erro.response?.data?.message || 
+                erro.response?.data?.error || 
+                erro.message || 
+                "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
+    }
 
 
 const checkInFetcherApagar =
     (id : string, callback : ApagarCkCallback ) : void => {
     apiBase.delete( `api/Checkins/${id}`)
     .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
-}
+    .catch(( erro : any) => {
+        console.error("Erro ao apagar check-in:", erro);
+        const errorMessage = erro.response?.data?.message || 
+                erro.response?.data?.error || 
+                erro.message || 
+                "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
+    }
 
 const checkInFetcherAtualizar =
     (id : string, checkIn : CheckIn, callback : AtualizarCkCallback ) : void => {
     console.log(id);
     apiBase.put( `api/Checkins/${id}`, checkIn )
     .then(()=>callback(true, ""))
-    .catch(( erro : any)=>callback(false, erro))
-}
+    .catch(( erro : any) => {
+        console.error("Erro ao atualizar check-in:", erro);
+        const errorMessage = erro.response?.data?.message || 
+                erro.response?.data?.error || 
+                erro.message || 
+                "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
+    }
 
 const checkInFetcherLer = (callback : LerCkCallback) : void => { 
     apiBase.get("api/Checkins")
@@ -54,7 +75,14 @@ const checkInFetcherLer = (callback : LerCkCallback) : void => {
         }
         callback(true, `Foram lidos ${listaCheckIns.length} CheckIns`, listaCheckIns);
     })
-    .catch((erro : any)=>callback(false, erro))
+    .catch((erro : any) => {
+        console.error("Erro ao ler check-ins:", erro);
+        const errorMessage = erro.response?.data?.message || 
+                erro.response?.data?.error || 
+                erro.message || 
+                "Erro interno do servidor";
+        callback(false, errorMessage);
+    })
 }
 
 export {checkInFetcherSalvar, checkInFetcherLer, 

@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ApagarUsuarioCallback, AtualizarUsuarioCallback, LerUsuarioCallback, SalvarUsuarioCallback } from "../fetcher/usuarioFetcher";
 import { RootScreenNavigationProp } from "../navigation/navigationParams";
 import { usePerfilControl } from "./perfilControl";
+import { enviarNotificacaoLocal } from "../service/notificacaoService";
 
 interface UsuarioControlHook {
     salvar : () => {};
@@ -16,7 +17,7 @@ interface UsuarioControlHook {
 
 
 const useUsuarioControl = () => {
-    const [usuario, setUsuario] = useState<Usuario>({idUsuario: "", nome: "",senha: "",email: "",telefone: ""});
+    const [usuario, setUsuario] = useState<Usuario>({idUsuario: null, nome: "",senha: "",email: "",telefone: ""});
     const [usuarioErro, setUsuarioErro] = useState<UsuarioErro>({});
     const [usuarioLista, setUsuarioLista] = useState<Usuario[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
@@ -28,11 +29,19 @@ const useUsuarioControl = () => {
     const navigation = useNavigation<RootScreenNavigationProp>();
 
     const salvarUsuarioCallback : SalvarUsuarioCallback = 
-    (success : boolean, msg: string, errosCampos?: UsuarioErro ) => {
+    async (success : boolean, msg: string, errosCampos?: UsuarioErro ) => {
         if (success) {
             setMensagem("Usuario Cadastrado com sucesso");
             lerUsuario();
             navigation.navigate("Login");
+            try {
+                await enviarNotificacaoLocal(
+                    "Usuario Cadastrado com sucesso! ",
+                    `Usuario ${usuario.idUsuario} foi cadastrado com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
         } else {
             setMensagem(msg);
             setUsuarioErro( errosCampos ??{});
@@ -43,10 +52,18 @@ const useUsuarioControl = () => {
 
 
     const atualizarUsuarioCallback  : AtualizarUsuarioCallback =
-    (success : boolean, msg: string, errosCampos ?: UsuarioErro) => {
+    async (success : boolean, msg: string, errosCampos ?: UsuarioErro) => {
         if (success) {
             setMensagem("Usuario Atualizado com sucesso");
             lerUsuario();
+            try {
+                await enviarNotificacaoLocal(
+                    "Usuario Atualizado com sucesso! ",
+                    `Atualização do usuario ${usuario.nome} foi realizada com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
         } else {
             setMensagem(msg);
             setUsuarioErro( errosCampos ??{});
@@ -67,10 +84,19 @@ const useUsuarioControl = () => {
     }
 
     const apagarUsuarioCallback : ApagarUsuarioCallback =
-    (success: boolean, msg: string) => {
+    async (success: boolean, msg: string) => {
         setSucesso(success);
         if(success) {
             setMensagem("Usuario apagado com sucesso");
+            try {
+                await enviarNotificacaoLocal(
+                    "Usuario Apagado com sucesso! ",
+                    `Usuario ${usuario.nome} foi apagado com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
+            lerUsuario();
         }
         else {
             setMensagem(msg);
@@ -107,7 +133,7 @@ const useUsuarioControl = () => {
         setUsuarioErro({});
         console.log(id);
         const usuariosFiltrados = usuarioLista.filter(
-            (u: Usuario)=> u.idUsuario == id
+            (u: Usuario)=> u.idUsuario == Number(id)
         );
         if (usuariosFiltrados.length>0) {
             setUsuario(usuariosFiltrados[0]);
@@ -121,12 +147,23 @@ const useUsuarioControl = () => {
             console.log("=== SALVAR ALTERAÇÃO USUARIO (PUT) ===");
             console.log("ID do usuário:", usuario.idUsuario);
             console.log("Dados completos do usuário:", usuario);
-            usuarioServiceAtualizar(usuario.idUsuario, usuario, atualizarUsuarioCallback);
+            usuarioServiceAtualizar(String(usuario.idUsuario), usuario, atualizarUsuarioCallback);
         }
 
     const handleUsuario = (txt: string, campo: string) => {
         const obj = {...usuario};
-        obj[campo as keyof typeof obj] = txt;
+        if (campo === "idUsuario") {
+            // Se o campo estiver vazio, define como null
+            if (txt.trim() === "") {
+                obj[campo as keyof typeof obj] = null;
+            } else {
+                // Converte para número
+                const numValue = parseInt(txt);
+                obj[campo as keyof typeof obj] = isNaN(numValue) ? null : numValue;
+            }
+        } else {
+            obj[campo as keyof typeof obj] = txt;
+        }
         setUsuario(obj);
     }
 

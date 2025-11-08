@@ -6,6 +6,7 @@ const useAppControl = () => {
     const [tokenTela, setTokenTela]= useState<boolean>(false);
     const [emailProfile, setEmailProfile] = useState<string| null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [tema, setTema] = useState<'light' | 'dark'>('light');
     const {setItem, getItem, removeItem} = useAsyncStorage("PERFIL");
 
     const setProfile = (tokenValue: string | null , emailValue : string| null) => {
@@ -47,7 +48,11 @@ const useAppControl = () => {
         removeItem();
     }
 
-    return { token, emailProfile, setProfile, loading, tokenTela, setTokenTela, clearProfile}
+    const defineTema = () => {
+        setTema(tema === 'light' ? 'dark' : 'light');
+    }
+
+    return { token, emailProfile, setProfile, loading, tokenTela, setTokenTela, clearProfile, tema, defineTema}
 
 }
 

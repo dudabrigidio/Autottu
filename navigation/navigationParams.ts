@@ -7,6 +7,7 @@ type RootParamList = {
     Motos: {screen : string};
     CheckIn: {screen : string};
     AlterarPerfil: undefined;
+    SobreApp: undefined;
 }
 
 

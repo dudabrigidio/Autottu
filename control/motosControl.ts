@@ -4,6 +4,7 @@ import { motoServiceSalvar, motoServiceLer, motoServiceAtualizar, motoServiceApa
 import { useNavigation } from "@react-navigation/native";
 import { SalvarMotoCallback, ApagarMotoCallback, AtualizarMotoCallback, LerMotoCallback, motoFetcherApagar, motoFetcherAtualizar, motoFetcherLer, motoFetcherSalvar} from "../fetcher/motosFetcher";
 import { RootScreenNavigationProp } from "../navigation/navigationParams";
+import { enviarNotificacaoLocal } from "../service/notificacaoService";
 
 interface MotosControlHook {
     salvar : () => {};
@@ -14,7 +15,7 @@ interface MotosControlHook {
 }
 
 const useMotosControl = () => {
-    const [motos, setMotos] = useState<Motos>({ idMoto: "", placa: "",modelo: "", marca: "", ano: "",ativoChar:"", fotoUrl: ""});
+    const [motos, setMotos] = useState<Motos>({ idMoto: null, placa: "",modelo: "", marca: "", ano: "",ativoChar:"", fotoUrl: ""});
     const [motosErro, setMotosErro] = useState<MotosErro>({});
     const [motosLista, setMotosLista] = useState<Motos[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
@@ -39,15 +40,24 @@ const useMotosControl = () => {
     const navigation = useNavigation<RootScreenNavigationProp>();
 
     const salvarMotosCallback : SalvarMotoCallback = 
-    (success : boolean, msg: string, errosCampos?: MotosErro ) => {
+    async (success : boolean, msg: string, errosCampos?: MotosErro ) => {
         if (success) {
             setMensagem("Motos Cadastrado com sucesso");
             clearMoto();
             lerMotos();
+            try {
+                await enviarNotificacaoLocal(
+                    "Moto Cadastrada com sucesso! ",
+                    `Moto ${motos.placa} foi cadastrada com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
+            
             navigation.navigate("Motos", {screen: "MotosLista"});
         } else {
             setMensagem(msg);
-            setMotosErro( errosCampos ??{});
+            setMotosErro( errosCampos ??{});         
         }
         setSucesso(success);
         setLoading(false);
@@ -55,11 +65,19 @@ const useMotosControl = () => {
 
 
     const atualizarMotosCallback  : AtualizarMotoCallback =
-    (success : boolean, msg: string, errosCampos ?: MotosErro) => {
+    async (success : boolean, msg: string, errosCampos ?: MotosErro) => {
         if (success) {
             setMensagem("Motos Atualizado com sucesso");
             clearMoto();
             lerMotos();
+            try {
+                await enviarNotificacaoLocal(
+                    "Moto Atualizada com sucesso! ",
+                    `Atualização da moto ${motos.placa} foi realizada com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
             navigation.navigate("Motos", {screen: "MotosLista"});
         } else {
             setMensagem(msg);
@@ -81,11 +99,20 @@ const useMotosControl = () => {
     }
 
     const apagarMotosCallback : ApagarMotoCallback =
-    (success: boolean, msg: string) => {
+    async (success: boolean, msg: string) => {
         setSucesso(success);
+        
         if(success) {
             setMensagem("Motos apagado com sucesso");
-            setLoading(true);
+            lerMotos();
+            try {
+                await enviarNotificacaoLocal(
+                    "Moto Apagada com sucesso! ",
+                    `A moto foi apagada com sucesso!`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
         }
         else {
             setMensagem(msg);
@@ -99,7 +126,7 @@ const useMotosControl = () => {
         setMotosErro({});
         console.log("idMoto:", motos.idMoto, "idMotoalterada: ", idMotoAlterada,"tipo:", typeof motos.idMoto);
         
-        if (motos.idMoto == null || motos.idMoto === "" || motos.idMoto !== idMotoAlterada) {
+        if (motos.idMoto == null || String(motos.idMoto) !== idMotoAlterada) {
             motoServiceSalvar(motosParaSalvar, salvarMotosCallback);
         } else {
             motoServiceAtualizar(motos.idMoto, motos, atualizarMotosCallback);
@@ -116,7 +143,6 @@ const useMotosControl = () => {
         setLoading(true);
         setMotosErro({});
         motoServiceApagar ( id, apagarMotosCallback);
-        lerMotos();
     }
 
     const atualizarMotos = (id : string) => {
@@ -124,7 +150,7 @@ const useMotosControl = () => {
         console.log(setIdMotoAlterada);
         setMotosErro({});
         const motosFiltrados = motosLista.filter(
-            (m: Motos)=> m.idMoto == id
+            (m: Motos)=> m.idMoto == Number(id)
         );
         if (motosFiltrados.length > 0) {
             setMotos(motosFiltrados[0]);

@@ -4,6 +4,7 @@ import {  checkInServiceSalvar, checkInServiceLer, checkInServiceAtualizar, chec
 import { useNavigation } from "@react-navigation/native";
 import { SalvarCkCallback, LerCkCallback, ApagarCkCallback, AtualizarCkCallback} from "../fetcher/checkinFetcher";
 import { RootScreenNavigationProp } from "../navigation/navigationParams";
+import { enviarNotificacaoPushParaDispositivo, enviarNotificacaoLocal } from "../service/notificacaoService";
 
 interface CheckInControlHook {
     salvar : () => {};
@@ -14,7 +15,7 @@ interface CheckInControlHook {
 }
 
 const useCheckInControl = () => {
-    const [checkIn, setCheckIn] = useState<CheckIn>({idCheckin: "", idMoto: "",idUsuario:"", ativoChar : "", observacao: "", timeStamp: "", imagensUrl: ""});
+    const [checkIn, setCheckIn] = useState<CheckIn>({idCheckin: null, idMoto: null, idUsuario: null, ativoChar : "", observacao: "", timeStamp: "", imagensUrl: ""});
     const [checkInErro, setCheckInErro] = useState<CheckInErro>({});
     const [checkInLista, setCheckInLista] = useState<CheckIn[]>([]);
     const [mensagem, setMensagem] = useState<string | null>(null);
@@ -25,8 +26,8 @@ const useCheckInControl = () => {
     const clearCheckIn = () => {
         setCheckIn({
             idCheckin: null, 
-            idMoto: "",
-            idUsuario:"", 
+            idMoto: null,
+            idUsuario: null, 
             ativoChar : "", 
             observacao: "", 
             timeStamp: "", 
@@ -36,14 +37,31 @@ const useCheckInControl = () => {
     const navigation = useNavigation<RootScreenNavigationProp>();
 
     const salvarCheckInCallback : SalvarCkCallback = 
-    (success : boolean, msg: string, errosCampos?: CheckInErro ) => {
+    async (success : boolean, msg: string, errosCampos?: CheckInErro ) => {
         if (success) {
             setMensagem("CheckIn realizado com sucesso");
+            
+            // Enviar notificação push quando check-in for realizado com sucesso
+            try {
+                await enviarNotificacaoPushParaDispositivo(
+                    "Check-in foi realizado!",
+                    `Check-in da moto ${checkIn.idMoto || 'N/A'} foi registrado com sucesso.`,
+                    { tipo: 'checkin', idMoto: checkIn.idMoto, idUsuario: checkIn.idUsuario }
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
+            
             lerCheckIn();
+            clearCheckIn();
+
             navigation.navigate("CheckIn", {screen: "CheckInLista"});
+
         } else {
             setMensagem(msg);
             setCheckInErro( errosCampos ??{});
+
+            
         }
         setSucesso(success);
         setLoading(false);
@@ -51,37 +69,67 @@ const useCheckInControl = () => {
 
 
     const atualizarCheckInCallback  : AtualizarCkCallback =
-    (success : boolean, msg: string, errosCampos ?: CheckInErro) => {
+    async (success : boolean, msg: string, errosCampos ?: CheckInErro) => {
         if (success) {
             setMensagem("CheckIn atualizado com sucesso");
+
+            try {
+                await enviarNotificacaoLocal(
+                    "Check-in Atualizado!",
+                    `Check-in da moto ${checkIn.idMoto || 'N/A'} foi atualizado com sucesso.`,
+                    { tipo: 'checkin', idMoto: checkIn.idMoto, idUsuario: checkIn.idUsuario }
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação:', error);
+            }
+
             clearCheckIn();
             lerCheckIn();
-            navigation.navigate("CheckIn", {screen: "CheckInLista"});
+
         } else {
             setMensagem(msg);
             setCheckInErro( errosCampos ??{});
+            
         }
         setSucesso(success);
         setLoading(false);
     }
 
     const lerCheckInCallback : LerCkCallback =
-    (success : boolean, msg : string, lista?: Array<CheckIn>) => {
+    async (success : boolean, msg : string, lista?: Array<CheckIn>) => {
         setSucesso(success);
         setMensagem(msg);
         if (lista) {
             setCheckInLista (lista);
             console.log("Lista =>", lista);
+            
+        } else {
+            try {
+                await enviarNotificacaoLocal(
+                    "Erro ao ler lista de CheckIn´s! ",
+                    `Problema encontrado`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação push:', error);
+            }
         }
         setLoading(false);
     }
 
     const apagarCheckInCallback : ApagarCkCallback =
-    (success: boolean, msg: string) => {
+    async (success: boolean, msg: string) => {
         setSucesso(success);
         if(success) {
             setMensagem("Checkin apagado com sucesso");
             lerCheckIn();
+            try {
+                await enviarNotificacaoLocal(
+                    "CheckIn apagado com sucesso! ",
+                    `CheckIn da moto ${checkIn.idMoto || 'N/A'} foi apagado com sucesso.`,
+                );
+            } catch (error) {
+                console.error('Erro ao enviar notificação', error);
+            }
         }
         else {
             setMensagem(msg);
@@ -95,12 +143,11 @@ const useCheckInControl = () => {
         setCheckInErro({});
         console.log("idCheckIn:", checkIn.idCheckin, "idCheckinAlterado: ", idCheckinAlterado);
 
-        if (checkIn.idCheckin == null || checkIn.idCheckin == '' || checkIn.idCheckin !== idCheckinAlterado ) {
+        if (checkIn.idCheckin == null || String(checkIn.idCheckin) !== idCheckinAlterado ) {
             checkInServiceSalvar ( checkInParaSalvar, salvarCheckInCallback);
         } else {
             checkInServiceAtualizar ( checkIn.idCheckin, checkIn, atualizarCheckInCallback );
         }
-        navigation.navigate("CheckIn", {screen: "CheckInLista"});
     }
 
     const lerCheckIn = () => {
@@ -124,19 +171,17 @@ const useCheckInControl = () => {
 
         setCheckInErro({});
         const checkInFiltrados = checkInLista.filter(
-            (c: CheckIn)=> c.idCheckin == id
+            (c: CheckIn)=> c.idCheckin == Number(id)
         );
         if (checkInFiltrados.length>0) {
             setCheckIn(checkInFiltrados[0]);
             navigation.navigate("CheckIn", {screen: "RealizarCheckIn"});
         }
-        setIdCheckinAlterado(id);
-
     }
 
     const handleCheckIn = (txt: string, campo: string) => {
         const obj = {...checkIn};
-        if (campo === "idCheckin") {
+        if (campo === "idCheckin" || campo === "idMoto" || campo === "idUsuario") {
 
             if (txt.trim() === "") {
                 obj[campo as keyof typeof obj] = null;
@@ -149,6 +194,7 @@ const useCheckInControl = () => {
         }
         setCheckIn(obj);
     }
+
 
     return { loading, mensagem, sucesso, checkIn, checkInErro, checkInLista, salvarCheckIn, lerCheckIn, apagarCheckIn, atualizarCheckIn, handleCheckIn};
 }

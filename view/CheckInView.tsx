@@ -1,13 +1,17 @@
 import { FC, ReactElement } from 'react';
-import {View, Text, TextInput, Button, Modal, ActivityIndicator, FlatList, FlatListComponent, ListRenderItemInfo, ListRenderItem} from 'react-native';
+import {View, Text, TextInput, Button, Modal, ActivityIndicator, FlatList, FlatListComponent, ListRenderItemInfo, ListRenderItem, TouchableOpacity, ScrollView} from 'react-native';
+import { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Feather, FontAwesome6, Fontisto, FontAwesome as Icon } from '@expo/vector-icons';
 import { useMotosControl } from '../control/motosControl';
-import { styles } from '../estilos';
+import { styles } from '../estilos/estilos';
 import { Motos } from '../model/Motos';
 import { CheckIn } from '../model/CheckIn';
 import { useCheckInControl } from '../control/checkInControl';
 import { StatusBar } from 'expo-status-bar';
+import { ContextoPrincipal } from '../contexto/contextoPrincipal';
+import { temas } from '../estilos/temas';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,63 +19,111 @@ interface CheckInViewProps {
 
 }
 
-
-
 const CheckInView: FC<CheckInViewProps> = ( props ) => {
     const  {loading, mensagem, sucesso, checkIn, checkInErro, 
         checkInLista, salvarCheckIn, lerCheckIn, apagarCheckIn, atualizarCheckIn, handleCheckIn} = useCheckInControl();
+    const { tema } = useContext(ContextoPrincipal);
+    const cores = temas[tema];
+    const { t } = useTranslation();
 
     return(
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: cores.background }]}>
             <StatusBar style='auto'/>
-            <Text style={{color: sucesso ? "green" : "red", 
-                fontSize: 18}}>{mensagem}</Text>
+            <Modal visible={loading} transparent={true} animationType="fade">
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}>
+                    <ActivityIndicator size="large" color="#0f4a26" />
+                </View>
+            </Modal>
+
             <Tab.Navigator>
                 <Tab.Screen name="RealizarCheckIn" 
                 options={{
-                    title: "Realizar CheckIn",
+                    title: t('checkin.realizar'),
                     headerShown: false,
                     tabBarIcon: ({size, color})=>
                     <Feather name="check-circle" size={24} color="black" />,
                     }}> 
                     {()=> { return (
-                        <View style={styles.container2}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                        <View style={[styles.container2, { backgroundColor: cores.background2 }]}>
             
-                            <StatusBar style='auto'/>
+    
+                            <Text style={{color: cores.text}}>{t('checkin.idMoto')}:</Text>
 
                             <Text style={{color: "red"}}>{checkInErro.idMoto}</Text>
-                            <TextInput value={checkIn.idMoto  ? String(checkIn.idMoto) : ""} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "idMoto")} keyboardType="numeric" style={styles.input} placeholder="Id da Moto:"/>
+                            <TextInput 
+                                value={checkIn.idMoto  ? String(checkIn.idMoto) : ""} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "idMoto")} 
+                                keyboardType="numeric" 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder={t('checkin.idMoto')}
+                                placeholderTextColor={cores.text}
+                            />
 
-                            <Text>Id do usuário que realiza o checkIn:</Text>
+                            <Text style={{color: cores.text}}>{t('checkin.idUsuario')}:</Text>
                             <Text style={{color: "red"}}>{checkInErro.idUsuario}</Text>
-                            <TextInput value={checkIn.idUsuario  ? String(checkIn.idUsuario) : ""} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "idUsuario")} keyboardType="numeric" style={styles.input} placeholder="Id do usuário:"/>
+                            <TextInput 
+                                value={checkIn.idUsuario  ? String(checkIn.idUsuario) : ""} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "idUsuario")} 
+                                keyboardType="numeric" 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder={t('checkin.idUsuario')}
+                                placeholderTextColor={cores.text}
+                            />
 
-                            <Text>Motos está violada?</Text>
+                            <Text style={{color: cores.text}}>{t('checkin.violada')}</Text>
                             <Text style={{color: "red"}}>{checkInErro.ativoChar}</Text>
-                            <TextInput value={checkIn.ativoChar} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "ativoChar")} style={styles.input} placeholder="(S/N):"/>
+                            <TextInput 
+                                value={checkIn.ativoChar} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "ativoChar")} 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder="(S/N):"
+                                placeholderTextColor={cores.text}
+                            />
 
-                            <Text>Observação</Text>
+                            <Text style={{color: cores.text}}>{t('checkin.observacao')}</Text>
                             <Text style={{color: "red"}}>{checkInErro.observacao}</Text>
-                            <TextInput value={checkIn.observacao} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "observacao")} style={styles.input} placeholder="Observações referente ao estado da moto:"/>
+                            <TextInput 
+                                value={checkIn.observacao} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "observacao")} 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder={t('checkin.observacao')}
+                                placeholderTextColor={cores.text}
+                            />
                             
-                            <Text>Data do CheckIn</Text>
+                            <Text style={{color: cores.text}}>{t('checkin.data')}</Text>
                             <Text style={{color: "red"}}>{checkInErro.timeStamp}</Text>
-                            <TextInput value={checkIn.timeStamp} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "timeStamp")} style={styles.input} placeholder="(Por favor insira no formato: aaaa-mm-dd):"/>
+                            <TextInput 
+                                value={checkIn.timeStamp} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "timeStamp")} 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder={t('checkin.formatoData')}
+                                placeholderTextColor={cores.text}
+                            />
                             
-                            <Text>Url das fotos da moto</Text>
+                            <Text style={{color: cores.text}}>{t('checkin.imagensUrl')}</Text>
                             <Text style={{color: "red"}}>{checkInErro.imagensUrl}</Text>
-                            <TextInput value={checkIn.imagensUrl} 
-                            onChangeText={(txt : string) => handleCheckIn(txt, "imagensUrl")} style={styles.input} placeholder="URL:"/>
+                            <TextInput 
+                                value={checkIn.imagensUrl} 
+                                onChangeText={(txt : string) => handleCheckIn(txt, "imagensUrl")} 
+                                style={[styles.input, { backgroundColor: cores.inputBg, color: cores.text }]} 
+                                placeholder={t('checkin.imagensUrl')}
+                                placeholderTextColor={cores.text}
+                            />
                             
-                            <Button title="Finalizar CheckIn" onPress={salvarCheckIn}/>
+                            <TouchableOpacity 
+                                onPress={salvarCheckIn}
+                                style={[styles.botao]}
+                            >
+                                <Feather name="check-circle" size={20} color="white" style={{ marginRight: 10 }} />
+                                <Text style={[styles.botaoTexto]}>
+                                    {t('checkin.finalizar')}
+                                </Text>
+                            </TouchableOpacity>
 
 
                         </View>
+                        </ScrollView>
                     )}}
 
                 </Tab.Screen>
@@ -83,24 +135,37 @@ const CheckInView: FC<CheckInViewProps> = ( props ) => {
                         <AntDesign name="eye" size={24} color="black" />,
                 }}> 
                     {()=>{return (
-                        <View style={styles.container2}>
-                            <Button title="Vizualizar CheckIns" onPress={lerCheckIn}/>
+                        <View style={[styles.container2, { backgroundColor: cores.background2 }]}>
+
+                            <TouchableOpacity 
+                                onPress={lerCheckIn}
+                                style={[styles.botao]}
+                            >
+                                <AntDesign name="eye" size={20} color="white" style={{ marginRight: 10 }} />
+                                <Text style={[styles.botaoTexto]}>
+                                    {t('checkin.visualizar')}
+                                </Text>
+                            </TouchableOpacity>
                             <FlatList style={{flex: 1}} data={checkInLista} renderItem={
                                 ( {item} : ListRenderItemInfo<CheckIn> ) : ReactElement =>{
                                     return (
-                                    <View style={{borderWidth: 1, padding: 5,margin: 10
-                                    }}> 
-                                        <Text>Id CheckIn: {item.idCheckin}</Text>
-                                        <Text>Id Moto: {item.idMoto}</Text>
-                                        <Text>Id Usuario: {item.idUsuario}</Text>
-                                        <Text>Violada: {item.ativoChar}</Text>
-                                        <Text>Observação: {item.observacao}</Text>
-                                        <Text>Data: {item.timeStamp}</Text>
-                                        <Text>URL das imagens da moto: {item.imagensUrl}</Text>
-                                        <Icon name="trash" size={20} color="red"
-                                            onPress={()=>apagarCheckIn( item.idCheckin )}/>
-                                        <Icon name="edit" size={20} color="black"
-                                            onPress={()=>atualizarCheckIn( item.idCheckin )}/>
+                                    <View style={[styles.card,
+                                        { backgroundColor: cores.cardBg }
+                                    ]}> 
+                                        <Text style={{color: cores.text}}>{t('checkin.idCheckin')}: {item.idCheckin}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.idMotoLabel')}: {item.idMoto}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.idUsuarioLabel')}: {item.idUsuario}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.violadaLabel')}: {item.ativoChar}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.observacaoLabel')}: {item.observacao}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.dataLabel')}: {item.timeStamp}</Text>
+                                        <Text style={{color: cores.text}}>{t('checkin.imagensLabel')}: {item.imagensUrl}</Text>
+                                        
+                                        <View style={styles.cardIcons}>
+                                            <Icon name="trash" size={20} color={cores.text}
+                                            onPress={()=>apagarCheckIn( String(item.idCheckin) )}/>
+                                            <Icon name="edit" size={20} color={cores.text}
+                                                onPress={()=>atualizarCheckIn( String(item.idCheckin) )}/>
+                                        </View>
                                     </View>)
                             }}/> 
                         </View>

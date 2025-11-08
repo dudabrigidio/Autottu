@@ -12,9 +12,16 @@ const checkInServiceSalvar =
         })
         .catch((errors : ValidationError)=> {
             const checkinErros: CheckInErro = {}
-            errors.inner.forEach((err: ValidationError) => {
-                checkinErros[err.path as keyof typeof checkinErros] = err.message;
-            });
+            if (errors.inner && errors.inner.length > 0) {
+                errors.inner.forEach((err: ValidationError) => {
+                    if (err.path) {
+                        checkinErros[err.path as keyof CheckInErro] = err.message;
+                    }
+                });
+            }
+            else if (errors.path) {
+                checkinErros[errors.path as keyof CheckInErro] = errors.message;
+            }
             callback(false, errors.message, checkinErros);
         })
     }
@@ -37,9 +44,16 @@ const checkInServiceAtualizar =
         })
         .catch((errors :ValidationError)=>{
             const checkinErros: CheckInErro = {}
-            errors.inner.forEach( (err: ValidationError) => {
-                checkinErros[err.path as keyof typeof checkinErros] = err.message;
-            });
+            if (errors.inner && errors.inner.length > 0) {
+                errors.inner.forEach((err: ValidationError) => {
+                    if (err.path) {
+                        checkinErros[err.path as keyof CheckInErro] = err.message;
+                    }
+                });
+            }
+            else if (errors.path) {
+                checkinErros[errors.path as keyof CheckInErro] = errors.message;
+            }
             callback(false, errors.message, checkinErros);
         })
     }

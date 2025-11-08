@@ -8,11 +8,12 @@ const usePerfilControl = () => {
     const navigation = useNavigation<RootScreenNavigationProp>();
     const {token, emailProfile, setProfile, clearProfile} = useContext(ContextoPrincipal);
     const {setTokenTela} = useAppControl();
+    
 
     const logout = () => {
+        
         clearProfile();
         setTokenTela(false);
-        navigation.navigate("Login");
     }
     return {token, emailProfile, setProfile, logout};
 }
