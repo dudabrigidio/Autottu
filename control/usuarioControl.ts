@@ -36,8 +36,8 @@ const useUsuarioControl = () => {
             navigation.navigate("Login");
             try {
                 await enviarNotificacaoLocal(
-                    "Usuario Cadastrado com sucesso! ",
-                    `Usuario ${usuario.idUsuario} foi cadastrado com sucesso!`,
+                    "Novo Usuario Cadastrado! ",
+                    `Usuario foi cadastrado com sucesso!`,
                 );
             } catch (error) {
                 console.error('Erro ao enviar notificação push:', error);

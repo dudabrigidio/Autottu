@@ -1,6 +1,6 @@
-# 📱 AUTOTTU
+# 📱 AutoTTU
 
-> Desenvolvemos a AutoTTU, uma solução tecnológica completa, para organização e controle de um pátio de motos.
+O **AutoTTU** é uma solução tecnológica desenvolvida para organização e controle de um pátio de motos. O sistema permite gerenciar check-ins, cadastrar motos e usuários, além de fornecer uma interface intuitiva para operadores do pátio.
 
 ## 💡 Solução
 
@@ -13,79 +13,59 @@
 
 ---
 
-## 🧪 Integrantes do Projeto
 
-Maria Eduarda Brigidio - RM558575 
+## 🚀 Funcionalidades
 
-André Luís Mesquita de Abreu- RM558159
+### Autenticação e Usuários
+- ✅ Login e autenticação de usuários
+- ✅ Cadastro de novos usuários
+- ✅ Gestão de perfil de usuários
+- ✅ Visualização e edição de funcionários cadastrados
 
-Rafael Bompadre Lima - RM556459
+### Gestão de Motos
+- ✅ Cadastro de motos (placa, modelo, marca, ano)
+- ✅ Visualização de motos cadastradas
+- ✅ Edição e exclusão de motos
+- ✅ Controle de status (ativa/inativa)
+
+### Check-in
+- ✅ Realização de check-in de motos
+- ✅ Registro de horário de entrada
+- ✅ Verificação de danos (moto violada)
+- ✅ Registro de observações
+- ✅ Upload de fotos da moto
+- ✅ Visualização de histórico de check-ins
+
+### Recursos Adicionais
+- ✅ Suporte a temas claro/escuro
+- ✅ Internacionalização (i18n) - Português e Espanhol
+- ✅ Notificações push
+- ✅ Interface responsiva e moderna
 
 ---
 
-## 🚀 Tecnologias e Ferramentas
+## 🏗️ Estrutura de Pastas
 
-- React Native
-- TypeScript / JavaScript
-- Expo / CLI
-- Bibliotecas usadas (ex: React Navigation, AsyncStorage, TabNavigator, etc.)
-
-
----
-
-## ⚙️ Como Rodar
-
-### Pré-requisitos
-
-- Node.js
-- Expo CLI ou React Native CLI
-- Android Studio ou emulador iOS
-- Conta na Expo (se aplicável)
-
-### Passos
-
-```bash
-# Clone o repositório
-git clone https://github.com/dudabrigidio/Autottu.git
-
-# Instale as dependências
-npm install
-
-# Inicie o projeto
-npx expo start
-npm run web
-# ou
-npm run android
 ```
-
-### 🏗️ Arquitetura do Projeto
-
-Padrão MVC/MVVM:
-Model → model/ (entidades de dados)
-View → view/ (interfaces de usuário)
-Control → control/ (lógica de negócio)
-Service → service/ (serviços de aplicação)
-Fetcher → fetcher/ (requisições HTTP)
-
-
-### 📁 Estrutura de Pastas do Projeto AutoTTU
-
-```bash
 autottu/
-├── 📁 assets/                    # Recursos estáticos
+├── 📁 android/                    # Configurações Android
+│   └── app/
+│       └── google-services.json
+│
+├── 📁 assets/                      # Recursos estáticos
 │   ├── adaptive-icon.png
 │   ├── favicon.png
 │   ├── icon.png
 │   ├── mottu-zero.webp
 │   └── splash-icon.png
 │
-├── 📁 componentes/               # Componentes reutilizáveis
+├── 📁 componentes/                 # Componentes reutilizáveis
 │   └── (vazio)
 │
-├── 📁 contexto/                  # Contextos React
+├── 📁 contexto/                    # Contextos React
 │   └── contextoPrincipal.ts
 │
-├── 📁 control/                   # Controladores de lógica
+├── 📁 control/                     # Controladores de lógica
 │   ├── appControl.ts
 │   ├── checkInControl.ts
 │   ├── loginControl.ts
@@ -93,71 +73,167 @@ autottu/
 │   ├── perfilControl.ts
 │   └── usuarioControl.ts
 │
-├── 📁 fetcher/                   # Camada de requisições HTTP
+├── 📁 estilos/                     # Estilos e temas
+│   ├── estilos.ts
+│   └── temas.ts
+│
+├── 📁 fetcher/                     # Camada de requisições HTTP
 │   ├── checkinFetcher.ts
 │   ├── loginFetcher.ts
 │   ├── motosFetcher.ts
 │   └── usuarioFetcher.ts
 │
-├── 📁 model/                     # Modelos de dados
+├── 📁 i18n/                        # Internacionalização
+│   ├── config.ts
+│   ├── es/
+│   │   └── es.json
+│   └── pt/
+│       └── pt.json
+│
+├── 📁 model/                       # Modelos de dados
 │   ├── CheckIn.ts
 │   ├── Motos.ts
 │   └── Usuario.ts
 │
-├── 📁 navigation/                # Configuração de navegação
+├── 📁 navigation/                  # Configuração de navegação
 │   └── navigationParams.ts
 │
-├── 📁 service/                   # Serviços de negócio
+├── 📁 service/                     # Serviços de negócio
 │   ├── checkinService.ts
 │   ├── loginService.ts
 │   ├── motosService.ts
+│   ├── notificacaoService.ts
 │   └── usuarioService.ts
 │
-├── 📁 view/                      # Telas/Views da aplicação
+├── 📁 utils/                       # Utilitários
+│   └── gitInfo.ts
+│
+├── 📁 view/                        # Telas/Views da aplicação
 │   ├── AlterarPerfil.tsx
 │   ├── CadastroUsuarioView.tsx
 │   ├── CheckInView.tsx
 │   ├── LoginView.tsx
 │   ├── MotosView.tsx
-│   └── PerfilView.tsx
+│   ├── PerfilView.tsx
+│   └── SobreAppView.tsx
 │
-├── 📁 node_modules/              # Dependências instaladas
-├── 📄 App.tsx                    # Componente principal
-├── 📄 app.json                   # Configuração do Expo
-├── 📄 estilos.ts                 # Estilos globais
-├── 📄 index.ts                   # Ponto de entrada
-├── 📄 package.json               # Dependências e scripts
-├── 📄 package-lock.json          # Lock das dependências
-├── 📄 README.md                  # Documentação
-└── 📄 tsconfig.json              # Configuração TypeScript
-
+├── 📁 scripts/                     # Scripts auxiliares
+│   └── update-git-info.js
+│
+├── 📄 App.tsx                      # Componente principal
+├── 📄 app.json                     # Configuração do Expo
+├── 📄 index.ts                     # Ponto de entrada
+├── 📄 package.json                 # Dependências e scripts
+├── 📄 tsconfig.json                # Configuração TypeScript
+└── 📄 README.md                    # Documentação
 ```
 
+---
 
+## 👥 Integrantes do Projeto
 
+| Nome | RM | GitHub |
+|------|----|--------|
+| Maria Eduarda Brigidio | RM558575 |
+| André Luís Mesquita de Abreu | RM558159 |
+| Rafael Bompadre Lima | RM556459 |
 
+---
 
+## 🛠️ Tecnologias e Ferramentas
 
-### Dependências principais (20):
+### Principais
+- **React Native** - Framework para desenvolvimento mobile
+- **TypeScript** - Linguagem de programação
+- **Expo** - Plataforma para desenvolvimento React Native
+- **React Navigation** - Navegação entre telas
+- **Axios** - Cliente HTTP
+- **i18next** - Internacionalização
+
+### Bibliotecas Principais
+- `@react-navigation/native` - Navegação nativa
+- `@react-navigation/bottom-tabs` - Navegação por abas
+- `@react-navigation/native-stack` - Navegação em pilha
+- `@react-native-async-storage/async-storage` - Armazenamento local
+- `expo-notifications` - Notificações push
+- `expo-localization` - Localização
+- `react-i18next` - Internacionalização React
+- `yup` - Validação de schemas
+- `date-fns` - Manipulação de datas
+
+---
+
+## ⚙️ Como Rodar o Projeto
+
+### Pré-requisitos
+
+- Node.js (versão 18 ou superior)
+- npm ou yarn
+- Expo CLI
+- Android Studio (para Android) ou Xcode (para iOS)
+- Conta na Expo (opcional, para desenvolvimento)
+
+### Instalação
+
+1. **Clone o repositório**
 ```bash
-@expo/metro-runtime
-@react-native-async-storage/async-storage
-@react-navigation/bottom-tabs
-@react-navigation/drawer
-@react-navigation/native
-@react-navigation/native-stack
-axios
-expo
-expo-status-bar
-navigation
-react
-react-dom
-react-native
-react-native-gesture-handler
-react-native-get-random-values
-react-native-reanimated
-react-native-safe-area-context
-react-native-screens
-react-native-web
-yup
+git clone https://github.com/dudabrigidio/Autottu.git
+cd Autottu/autottu
 ```
+
+2. **Instale as dependências**
+```bash
+npm install
+```
+
+3. **Inicie o projeto**
+```bash
+# Inicia o servidor Expo
+npx expo start
+
+# Ou use os scripts do package.json
+npm start        # Inicia o servidor Expo
+npm run android  # Inicia no Android
+npm run ios      # Inicia no iOS
+npm run web      # Inicia no navegador
+```
+
+### Executando no Dispositivo
+
+- **Android**: Escaneie o QR code com o app Expo Go ou execute `npm run android` com um emulador/dispositivo conectado
+- **iOS**: Escaneie o QR code com a câmera do iPhone ou execute `npm run ios` com um simulador/dispositivo conectado
+- **Web**: Execute `npm run web` para abrir no navegador
+
+---
+
+## 🏛️ Arquitetura do Projeto
+
+O projeto segue o padrão **MVC/MVVM** com separação clara de responsabilidades:
+
+- **Model** (`model/`) - Entidades de dados e modelos
+- **View** (`view/`) - Interfaces de usuário e telas
+- **Control** (`control/`) - Lógica de negócio e controle
+- **Service** (`service/`) - Serviços de aplicação
+- **Fetcher** (`fetcher/`) - Camada de requisições HTTP
+
+---
+
+## 📝 Scripts Disponíveis
+
+```bash
+npm start          # Inicia o servidor Expo
+npm run android    # Inicia no Android
+npm run ios        # Inicia no iOS
+npm run web        # Inicia no navegador
+npm run git-info   # Atualiza informações do Git
+```
+
+---
+
+## 📄 Licença
+
+Este projeto é privado e desenvolvido para fins acadêmicos.
+
+---
+
+**Desenvolvido pela equipe AutoTTU - 2025**

@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import {View, Text, TextInput, Button, Modal, ActivityIndicator, FlatList, FlatListComponent, ListRenderItemInfo, ListRenderItem, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, Button, Modal, ActivityIndicator, FlatList, FlatListComponent, ListRenderItemInfo, ListRenderItem, TouchableOpacity, ScrollView} from 'react-native';
 import { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome6, Fontisto, FontAwesome as Icon, AntDesign } from '@expo/vector-icons';
@@ -44,6 +44,8 @@ const MotosView: FC<MotosViewProps> = ( props ) => {
                     <Fontisto name="motorcycle" size={24} color="black" />,
                     }}> 
                     {()=> { return (
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                        
                         <View style={[styles.container2, { backgroundColor: cores.background2 }]}>
             
                             <StatusBar style='auto'/>
@@ -110,6 +112,7 @@ const MotosView: FC<MotosViewProps> = ( props ) => {
 
                         
                         </View>
+                        </ScrollView>
                     )}}
 
                 </Tab.Screen>

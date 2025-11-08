@@ -106,9 +106,31 @@ export default function App() {
             {tokenTela ? (
               //Usuario Logado
               <Tab.Navigator initialRouteName="CheckIn" >
-                  <Tab.Screen name="UsuariosCadastrados" options= {{headerShown: false}} component={PerfilView}/>
-                  <Tab.Screen name="CheckIn" component={CheckInView}/>
-                  <Tab.Screen name="Motos" component={MotosView}/>
+                  <Tab.Screen 
+                    name="Usuarios" 
+                    options={{
+                      headerShown: false,
+                      tabBarIcon: ({size, color}) => 
+                        <Feather name="user" size={24} color="black" />
+                    }} 
+                    component={PerfilView}
+                  />
+                  <Tab.Screen 
+                    name="CheckIn" 
+                    options={{
+                      tabBarIcon: ({size, color}) => 
+                        <Feather name="check-circle" size={24} color="black" />
+                    }}
+                    component={CheckInView}
+                  />
+                  <Tab.Screen 
+                    name="Motos" 
+                    options={{
+                      tabBarIcon: ({size, color}) => 
+                        <FontAwesome6 name="motorcycle" size={24} color="black" />
+                    }}
+                    component={MotosView}
+                  />
                   <Tab.Screen 
                     name="SobreApp" 
                     component={SobreAppView}
