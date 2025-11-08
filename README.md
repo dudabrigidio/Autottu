@@ -12,7 +12,15 @@ O **AutoTTU** é uma solução tecnológica desenvolvida para organização e co
 >Atráves desse sistema, iremos garantir o bom funcionamento do pátio e a organização de forma automatizada, otimizando tempo e promovendo um ambiente mais eficiente e confiável
 
 ---
+## Links Importantes
 
+## Links Importantes
+
+- Vídeo demonstrativo: [YouTube](https://youtu.be/JXR4s7E06tA)  
+- Firebase App Distribution: [Download APK/AAB](https://appdistribution.firebase.google.com/testerapps/1:976584900743:android:80f58c917f9c9c19e47822/releases/1n6cnmjrd6gpo?utm_source=firebase-console)  
+  - Acesso concedido ao e‑mail: `profantonio.neto@fiap.com.br` (convite enviado)
+
+---
 
 ## 🚀 Funcionalidades
 
