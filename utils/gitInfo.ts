@@ -1,8 +1,8 @@
 
     export const gitInfo = {
-    commitHash: '673511e',
-    commitHashFull: '673511e526a1f753cd6a80cff6d2bc1a7fd01cec',
+    commitHash: '93ae342',
+    commitHashFull: '93ae34218e5762eeded672f7d31c1e60e3245af6',
     branch: 'main',
-    lastCommitDate: '2025-10-01'
+    lastCommitDate: '2025-11-08'
     };
     

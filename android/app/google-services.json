@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "976584900743",
+    "project_id": "autottu-31039",
+    "storage_bucket": "autottu-31039.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976584900743:android:80f58c917f9c9c19e47822",
+        "android_client_info": {
+          "package_name": "com.autottu.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMXCP1r0zVBgFNIfovaiPZil8IabgAvUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
