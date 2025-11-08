@@ -56,3 +56,108 @@ npx expo start
 npm run web
 # ou
 npm run android
+```
+
+### 🏗️ Arquitetura do Projeto
+
+Padrão MVC/MVVM:
+Model → model/ (entidades de dados)
+View → view/ (interfaces de usuário)
+Control → control/ (lógica de negócio)
+Service → service/ (serviços de aplicação)
+Fetcher → fetcher/ (requisições HTTP)
+
+
+### 📁 Estrutura de Pastas do Projeto AutoTTU
+
+```bash
+autottu/
+├── 📁 assets/                    # Recursos estáticos
+│   ├── adaptive-icon.png
+│   ├── favicon.png
+│   ├── icon.png
+│   ├── mottu-zero.webp
+│   └── splash-icon.png
+│
+├── 📁 componentes/               # Componentes reutilizáveis
+│   └── (vazio)
+│
+├── 📁 contexto/                  # Contextos React
+│   └── contextoPrincipal.ts
+│
+├── 📁 control/                   # Controladores de lógica
+│   ├── appControl.ts
+│   ├── checkInControl.ts
+│   ├── loginControl.ts
+│   ├── motosControl.ts
+│   ├── perfilControl.ts
+│   └── usuarioControl.ts
+│
+├── 📁 fetcher/                   # Camada de requisições HTTP
+│   ├── checkinFetcher.ts
+│   ├── loginFetcher.ts
+│   ├── motosFetcher.ts
+│   └── usuarioFetcher.ts
+│
+├── 📁 model/                     # Modelos de dados
+│   ├── CheckIn.ts
+│   ├── Motos.ts
+│   └── Usuario.ts
+│
+├── 📁 navigation/                # Configuração de navegação
+│   └── navigationParams.ts
+│
+├── 📁 service/                   # Serviços de negócio
+│   ├── checkinService.ts
+│   ├── loginService.ts
+│   ├── motosService.ts
+│   └── usuarioService.ts
+│
+├── 📁 view/                      # Telas/Views da aplicação
+│   ├── AlterarPerfil.tsx
+│   ├── CadastroUsuarioView.tsx
+│   ├── CheckInView.tsx
+│   ├── LoginView.tsx
+│   ├── MotosView.tsx
+│   └── PerfilView.tsx
+│
+├── 📁 node_modules/              # Dependências instaladas
+├── 📄 App.tsx                    # Componente principal
+├── 📄 app.json                   # Configuração do Expo
+├── 📄 estilos.ts                 # Estilos globais
+├── 📄 index.ts                   # Ponto de entrada
+├── 📄 package.json               # Dependências e scripts
+├── 📄 package-lock.json          # Lock das dependências
+├── 📄 README.md                  # Documentação
+└── 📄 tsconfig.json              # Configuração TypeScript
+
+```
+
+
+
+
+
+
+### Dependências principais (20):
+```bash
+@expo/metro-runtime
+@react-native-async-storage/async-storage
+@react-navigation/bottom-tabs
+@react-navigation/drawer
+@react-navigation/native
+@react-navigation/native-stack
+axios
+expo
+expo-status-bar
+navigation
+react
+react-dom
+react-native
+react-native-gesture-handler
+react-native-get-random-values
+react-native-reanimated
+react-native-safe-area-context
+react-native-screens
+react-native-web
+yup
+```
